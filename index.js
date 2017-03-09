@@ -56,6 +56,9 @@ getStdin().then(str => {
     ? container.Config.Env
     : [];
 
+  // NOTE: this is reported in B, convert to MB
+  var containerSize = Math.ceil(container.Size / 1000000);
+
   var envKeys = [];
 
   // Environment variables are in shell syntax (key=value), and need to be extracted
@@ -92,11 +95,49 @@ getStdin().then(str => {
     ? policy.ports.range
     : null;
 
+  var maxSize = (policy.size)
+    ? policy.size.max
+    : null;
+
+  var warningSize = (policy.size)
+    ? policy.size.warning
+    : null;
+
   var failedEnvKeys = [];
   var failedLabels = [];
   var failedVolumes = false;
   var failedPortRequirement = false;
   var failedPortRange = false;
+  var failedMaxSize = false;
+  var failedWarningSize = false;
+
+  failedWarningSize = (warningSize !== null && containerSize >= warningSize);
+
+  if (maxSize === null ) {
+
+    if (failedWarningSize) {
+      console.log("[%s] %dMB container size should be below %dMB", clc.yellow('WARN'), containerSize, warningSize);
+    }
+    else {
+      console.log("[%s] no max container size limit specified", clc.whiteBright('PASS'));
+    }
+
+  } else {
+
+    if (containerSize > maxSize) {
+      failedMaxSize = true;
+      console.log("[%s] %dMB exceeded %dMB max container size limit", clc.red('FAIL'), containerSize, maxSize);
+    } else {
+
+      if (failedWarningSize) {
+        console.log("[%s] %dMB container size should be below %dMB", clc.yellow('WARN'), containerSize, warningSize);
+      }
+      else {
+        console.log("[%s] %dMB within %dMB max container size limit", clc.whiteBright('PASS'), containerSize, maxSize);
+      }
+    }
+
+  }  // else maxSize
 
   envKeys.forEach(function(element, index, array) {
     if (disallowedEnvKeys.indexOf(element) !== -1) {
@@ -111,46 +152,47 @@ getStdin().then(str => {
   });
 
   if (failedLabels.length > 0) {
-    console.log("[FAIL] disallowed labels present:");
+    console.log("[%s] disallowed labels present:", clc.red('FAIL'));
     failedLabels.forEach(function(element, index, array){
       console.log("\t- %s", element);
     });
   } else {
-    console.log("[%s] labels validated", 'PASS');
+    console.log("[%s] labels validated", clc.whiteBright('PASS'));
   }
 
   if (failedEnvKeys.length > 0) {
-    console.log("[FAIL] disallowed env keys present:");
+    console.log("[%s] disallowed env keys present:", clc.red('FAIL'));
     failedEnvKeys.forEach(function(element, index, array){
       console.log("\t- %s", element);
     });
   } else {
-    console.log("[%s] env keys validated", 'PASS');
+    console.log("[%s] env keys validated", clc.whiteBright('PASS'));
   }
 
 
   if (disallowedVolumes && volumes.length) {
-    console.log("[FAIL] volumes are disallowed");
+    console.log("[%s] volumes are disallowed", clc.red('FAIL'));
     volumes.forEach(function(element, index, array){
       console.log("\t- %s", element);
     });
     failedVolumes = true;
   } else {
-    console.log("[PASS] no volumes %s", disallowedVolumes ? "allowed, none defined" : "in use" );
+    console.log("[%s] volumes %s", clc.whiteBright('PASS'), disallowedVolumes ? "not allowed, none defined" : "not in use" );
   }
 
-  if (portsRequired && !ports.length) {
-    failedPortRequirement = true;
-    console.log("[%s] exposed port(s) required", 'FAIL');
+  failedPortRequirement = (portsRequired && !ports.length);
+
+  if (failedPortRequirement) {
+    console.log("[%s] exposed port(s) required", clc.red('FAIL'));
   }
 
   if (portsRange) {
-    var split = portsRange.split('-'),
-        lowerRange = parseInt(split[0]),
-        upperRange = parseInt(split[1]);
+    var split = portsRange.split('-');
+    var lowerRange = parseInt(split[0]);
+    var upperRange = parseInt(split[1]);
 
     if (upperRange < lowerRange) {
-      console.log('[%s] invalid port range specific', 'EXCEPTION');
+      console.log('[%s] invalid port range specified', clc.yellowBright('EXCEPTION'));
       failedPortRange = true;
     } else {
 
@@ -160,7 +202,7 @@ getStdin().then(str => {
         if (portNumber >= lowerRange && portNumber <= upperRange) {
           return true;
         }
-        console.log('[%s] port <%d> out of range [%s]', 'FAIL', portNumber, portsRange);
+        console.log('[%s] port <%d> out of range [%s]', clc.red('FAIL'), portNumber, portsRange);
         return false;
       });
 
@@ -168,10 +210,10 @@ getStdin().then(str => {
 
   } // if portsRange
 
-  var failedAnyTest = (failedEnvKeys.length || failedLabels.length || failedVolumes || failedPortRequirement || failedPortRange);
+  var failedAnyTest = (failedMaxSize || failedEnvKeys.length || failedLabels.length || failedVolumes || failedPortRequirement || failedPortRange);
 
   if (failedAnyTest) {
-    console.log("\nStatus [%s]\n", clc.red('FAIL'));
+    console.log("\nStatus [%s]\n", clc.redBright('FAIL'));
     process.exit(1);
   }
 

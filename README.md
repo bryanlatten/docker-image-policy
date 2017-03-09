@@ -32,16 +32,18 @@ Quick validation of an inspected Docker image according to a policy file
 ```
 docker inspect 359039b8c10c | node index.js
 
-Scanning <sha256:359039b8c10c75b199f9b100194e8d26731dc86727b06d082d036566690180e6>
+Scanning <sha256:4612b98d0345171da30a0318faa9d1b05da7c8cb1440d5f5d2e5f032f49908c0>
 Docker Build: 17.03.0-ce
-Parent: sha256:467eaeabe97cbb91654288348a36f359989a8d520ebb23167fdf4b0fe20125a0
+Parent: sha256:905312a465bdd005beb8d6c319f1170e391d9c9f0da8d4da60d7eccc16b56661
 
 Using policy <./default_policy.yaml>
 
+[PASS] 4MB within 1500MB container size limit
 [FAIL] disallowed labels present:
   - com.swipely.iam-docker.iam-profile
 [FAIL] disallowed env keys present:
   - IAM_ROLE
+[PASS] volumes not allowed, none defined
 [FAIL] exposed port(s) required
 
 Status [FAIL]
@@ -57,8 +59,10 @@ Parent:
 
 Using policy <./default_policy.yaml>
 
+[PASS] 370MB within 1500MB container size limit
 [PASS] labels validated
 [PASS] env keys validated
+[PASS] volumes not allowed, none defined
 
 Status [PASS]
 ```
@@ -91,4 +95,11 @@ ports:
 ```
 volumes:
   disallowed: true
+```
+
+- Restrict maximum container size
+```
+size:
+  # In MB
+  max: 1500
 ```
