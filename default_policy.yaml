@@ -12,5 +12,8 @@ ports:
   required: true
   # Use only non-privileged container ports to drop additional kernel CAPs
   range: '1025-99999'
-
+size:
+  # In MB
+  max: 1500
+  warning: 1000
 
