@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "cli-color": "^1.2.0",
+    "commander": "^2.9.0",
+    "get-stdin": "^5.0.1",
+    "yamljs": "^0.2.8"
+  }
+}

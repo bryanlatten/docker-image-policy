@@ -1,0 +1,16 @@
+version: "1"
+labels:
+  disallow:
+  -  com.swipely.iam-docker.iam-profile
+env_keys:
+  disallow:
+  - IAM_ROLE
+volumes:
+  # Does not fit with stateless design
+  disallowed: true
+ports:
+  required: true
+  # Use only non-privileged container ports to drop additional kernel CAPs
+  range: '1025-99999'
+
+
