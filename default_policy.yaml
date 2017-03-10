@@ -9,8 +9,8 @@ volumes:
   # Does not fit with stateless design
   disallowed: true
 ports:
-  required: true
-  # Use only non-privileged container ports to drop additional kernel CAPs
+  required: false
+  # Inclusive range for non-privileged ports
   range: '1025-99999'
 size:
   # In MB
