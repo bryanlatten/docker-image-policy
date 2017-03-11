@@ -1,6 +1,10 @@
 #!/usr/bin/env node
 'use strict';
 
+/**
+ * Module dependencies.
+ */
+
 const getStdin = require('get-stdin');
 const program = require('commander');
 const fs = require('fs');
@@ -42,28 +46,37 @@ getStdin().then(str => {
   console.log("\nUsing policy <%s>\n", policyFile);
 
   var loadedPolicy = YAML.load(policyFile);
-  var policy = require("./lib/policy.js")(loadedPolicy, input[0]);
+  var policy = require("./lib/policy.js")();
 
 
-  var passedTests = policy.execute();
+  var testStatus = policy.execute(loadedPolicy, container);
 
-  policy.exceptionMsgs.forEach(function(element) {
-    console.log("[%s] %s", clc.yellowBright('EXCEPTION'), element);
+  testStatus.getMessages().forEach(function(msg) {
+
+    var severity = msg[0];
+    var text = msg[1];
+
+    switch(severity) {
+      case 'exception':
+        console.log("[%s] %s", clc.magenta('EXCEPTION'), text);
+        break;
+      case 'success':
+        console.log("[%s] %s", clc.whiteBright('PASS'), text);
+        break;
+      case 'failure':
+        console.log("[%s] %s", clc.red('FAIL'), text);
+        break;
+      case 'warning':
+        console.log("[%s] %s", clc.yellowBright('WARN'), text);
+        break;
+      default:
+        console.log("[%s %s", clc.blue('UNKOWN'), text);
+        break;
+    } // switch mesg
+
   });
 
-  policy.successMsgs.forEach(function(element) {
-    console.log("[%s] %s", clc.whiteBright('PASS'), element);
-  });
-
-  policy.warningMsgs.forEach(function(element) {
-    console.log("[%s] %s", clc.magenta('WARN'), element);
-  });
-
-  policy.failureMsgs.forEach(function(element) {
-    console.log("[%s] %s", clc.red('FAIL'), element);
-  });
-
-  if (!passedTests) {
+  if (!testStatus.isPassing()) {
     console.log("\nStatus [%s]\n", clc.redBright('FAIL'));
     process.exit(1);
   }

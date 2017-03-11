@@ -1,8 +1,16 @@
 {
+  "scripts": {
+    "test": "mocha"
+  },
   "dependencies": {
     "cli-color": "^1.2.0",
     "commander": "^2.9.0",
     "get-stdin": "^5.0.1",
     "yamljs": "^0.2.8"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "mocha": "^3.2.0",
+    "sinon": "^1.17.7"
   }
 }
