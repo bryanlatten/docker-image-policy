@@ -5,7 +5,7 @@ COPY ./ /app/
 
 WORKDIR /app
 
-RUN npm install
+RUN export NODE_ENV=production && npm install
 
 ENTRYPOINT ["/usr/bin/node", "index.js"]
 
