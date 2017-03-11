@@ -1,0 +1,14 @@
+sudo: required
+language: node_js
+node_js:
+  - "7"
+
+services:
+  - docker
+
+before_script:
+  - npm install
+
+script:
+- npm test
+- docker build -t image-policy .
