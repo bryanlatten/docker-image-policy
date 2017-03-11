@@ -1,0 +1,112 @@
+[
+    {
+        "Id": "sha256:daa24012ae6317cb8e71b7c6a590d42af1b599dc16eaaff38ce7c380004f2547",
+        "RepoTags": [],
+        "RepoDigests": [],
+        "Parent": "sha256:e034b16bf82f4729e9c60e5cd7239705aff17307958f81fd5b35d629e1a566bc",
+        "Comment": "",
+        "Created": "2017-03-11T22:54:11.589906716Z",
+        "Container": "ad270872cb4cc04a8893e1a5fb33d2341f51d712b4e91753aa835b149c73272c",
+        "ContainerConfig": {
+            "Hostname": "84baa8e89c00",
+            "Domainname": "",
+            "User": "",
+            "AttachStdin": false,
+            "AttachStdout": false,
+            "AttachStderr": false,
+            "ExposedPorts": {
+                "1/tcp": {},
+                "10/tcp": {},
+                "2/tcp": {},
+                "3/tcp": {},
+                "4/tcp": {},
+                "5/tcp": {},
+                "6/tcp": {},
+                "7/tcp": {},
+                "8/tcp": {},
+                "9/tcp": {}
+            },
+            "Tty": false,
+            "OpenStdin": false,
+            "StdinOnce": false,
+            "Env": [
+                "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+                "abc=asda",
+                "def=1234",
+                "IAM_ROLE=1235823838"
+            ],
+            "Cmd": [
+                "/bin/sh",
+                "-c",
+                "#(nop) ",
+                "VOLUME [/myvolume]"
+            ],
+            "Image": "sha256:e034b16bf82f4729e9c60e5cd7239705aff17307958f81fd5b35d629e1a566bc",
+            "Volumes": {
+                "/myvolume": {}
+            },
+            "WorkingDir": "",
+            "Entrypoint": null,
+            "OnBuild": [],
+            "Labels": {
+                "com.swipely.iam-docker.iam-profile": "abcd"
+            }
+        },
+        "DockerVersion": "17.03.0-ce",
+        "Author": "",
+        "Config": {
+            "Hostname": "84baa8e89c00",
+            "Domainname": "",
+            "User": "",
+            "AttachStdin": false,
+            "AttachStdout": false,
+            "AttachStderr": false,
+            "ExposedPorts": {
+                "1/tcp": {},
+                "10/tcp": {},
+                "2/tcp": {},
+                "3/tcp": {},
+                "4/tcp": {},
+                "5/tcp": {},
+                "6/tcp": {},
+                "7/tcp": {},
+                "8/tcp": {},
+                "9/tcp": {}
+            },
+            "Tty": false,
+            "OpenStdin": false,
+            "StdinOnce": false,
+            "Env": [
+                "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+                "abc=asda",
+                "def=1234",
+                "IAM_ROLE=1235823838"
+            ],
+            "Cmd": null,
+            "Image": "sha256:e034b16bf82f4729e9c60e5cd7239705aff17307958f81fd5b35d629e1a566bc",
+            "Volumes": {
+                "/myvolume": {}
+            },
+            "WorkingDir": "",
+            "Entrypoint": null,
+            "OnBuild": [],
+            "Labels": {
+                "com.swipely.iam-docker.iam-profile": "abcd"
+            }
+        },
+        "Architecture": "amd64",
+        "Os": "linux",
+        "Size": 3987495000,
+        "VirtualSize": 3987495000,
+        "GraphDriver": {
+            "Name": "aufs",
+            "Data": null
+        },
+        "RootFS": {
+            "Type": "layers",
+            "Layers": [
+                "sha256:23b9c7b43573dd164619ad59e9d51eda4095926729f59d5f22803bcbe9ab24c2"
+            ]
+        }
+    }
+]
