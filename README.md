@@ -21,6 +21,10 @@ Quick validation of an inspected Docker image according to a policy file
 1. `docker build -t imagepolicy .`
 1. ```docker inspect {target_image} | docker run -i imagepolicy```
 
+### Testing 
+
+- After local installation, running `npm test` in working directory
+
 ### Usage
 
 - Uses pre-built containers on Docker Hub
@@ -28,7 +32,6 @@ Quick validation of an inspected Docker image according to a policy file
 
 
 ```docker inspect {target_image} | docker run -i bryanlatten/docker-image-policy```
-
 
 ##### Failing Run, using default policy
 ```
