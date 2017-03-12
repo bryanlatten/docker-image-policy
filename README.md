@@ -107,4 +107,5 @@ volumes:
 size:
   # In MB
   max: 1500
+  warning: 1000
 ```
