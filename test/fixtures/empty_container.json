@@ -1,0 +1,84 @@
+[
+    {
+        "Id": "sha256:79ccf85ba56e27d65300cd2a6163cb2b4239cafea1c56ec4c1a16d9e76ea80e3",
+        "RepoTags": [],
+        "RepoDigests": [],
+        "Parent": "sha256:4a415e3663882fbc554ee830889c68a33b3585503892cc718a4698e91ef2a526",
+        "Comment": "",
+        "Created": "2017-03-13T20:06:09.859729969Z",
+        "Container": "26883e384087b717f572ef6c152418dc1818911bf00f422cdded32850fbc323d",
+        "ContainerConfig": {
+            "Hostname": "84baa8e89c00",
+            "Domainname": "",
+            "User": "",
+            "AttachStdin": false,
+            "AttachStdout": false,
+            "AttachStderr": false,
+            "Tty": false,
+            "OpenStdin": false,
+            "StdinOnce": false,
+            "Env": [
+                "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+            ],
+            "Cmd": [
+                "/bin/sh",
+                "-c",
+                "#(nop) ",
+                "HEALTHCHECK &{[\"NONE\"] \"0s\" \"0s\" '\\x00'}"
+            ],
+            "Healthcheck": {
+                "Test": [
+                    "NONE"
+                ]
+            },
+            "Image": "sha256:4a415e3663882fbc554ee830889c68a33b3585503892cc718a4698e91ef2a526",
+            "Volumes": null,
+            "WorkingDir": "",
+            "Entrypoint": null,
+            "OnBuild": [],
+            "Labels": {}
+        },
+        "DockerVersion": "17.03.0-ce",
+        "Author": "",
+        "Config": {
+            "Hostname": "84baa8e89c00",
+            "Domainname": "",
+            "User": "",
+            "AttachStdin": false,
+            "AttachStdout": false,
+            "AttachStderr": false,
+            "Tty": false,
+            "OpenStdin": false,
+            "StdinOnce": false,
+            "Env": [
+                "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+            ],
+            "Cmd": null,
+            "Healthcheck": {
+                "Test": [
+                    "NONE"
+                ]
+            },
+            "Image": "sha256:4a415e3663882fbc554ee830889c68a33b3585503892cc718a4698e91ef2a526",
+            "Volumes": null,
+            "WorkingDir": "",
+            "Entrypoint": null,
+            "OnBuild": [],
+            "Labels": {}
+        },
+        "Architecture": "amd64",
+        "Os": "linux",
+        "Size": 3987495,
+        "VirtualSize": 3987495,
+        "GraphDriver": {
+            "Name": "aufs",
+            "Data": null
+        },
+        "RootFS": {
+            "Type": "layers",
+            "Layers": [
+                "sha256:23b9c7b43573dd164619ad59e9d51eda4095926729f59d5f22803bcbe9ab24c2"
+            ]
+        }
+    }
+]

@@ -1,12 +1,12 @@
 [
     {
-        "Id": "sha256:daa24012ae6317cb8e71b7c6a590d42af1b599dc16eaaff38ce7c380004f2547",
+        "Id": "sha256:9b66f7c7b255afc6e0adfc5c7ca769d78808607ac782467168e4fb0c4849db56",
         "RepoTags": [],
         "RepoDigests": [],
-        "Parent": "sha256:e034b16bf82f4729e9c60e5cd7239705aff17307958f81fd5b35d629e1a566bc",
+        "Parent": "sha256:ee310f59941d1713072b28e60b0ae1f3753ab374fd7f27f961ec4a1923404d1d",
         "Comment": "",
-        "Created": "2017-03-11T22:54:11.589906716Z",
-        "Container": "ad270872cb4cc04a8893e1a5fb33d2341f51d712b4e91753aa835b149c73272c",
+        "Created": "2017-03-13T18:53:42.4690133Z",
+        "Container": "d44ad21f7315b03c60d7ca176bc0ad57c0a11c481c79af5e382c8cbaa73ba309",
         "ContainerConfig": {
             "Hostname": "84baa8e89c00",
             "Domainname": "",
@@ -41,7 +41,15 @@
                 "#(nop) ",
                 "VOLUME [/myvolume]"
             ],
-            "Image": "sha256:e034b16bf82f4729e9c60e5cd7239705aff17307958f81fd5b35d629e1a566bc",
+            "Healthcheck": {
+                "Test": [
+                    "CMD-SHELL",
+                    "ls -l"
+                ],
+                "Interval": 300000000000,
+                "Timeout": 3000000000
+            },
+            "Image": "sha256:ee310f59941d1713072b28e60b0ae1f3753ab374fd7f27f961ec4a1923404d1d",
             "Volumes": {
                 "/myvolume": {}
             },
@@ -83,7 +91,15 @@
                 "IAM_ROLE=1235823838"
             ],
             "Cmd": null,
-            "Image": "sha256:e034b16bf82f4729e9c60e5cd7239705aff17307958f81fd5b35d629e1a566bc",
+            "Healthcheck": {
+                "Test": [
+                    "CMD-SHELL",
+                    "ls -l"
+                ],
+                "Interval": 300000000000,
+                "Timeout": 3000000000
+            },
+            "Image": "sha256:ee310f59941d1713072b28e60b0ae1f3753ab374fd7f27f961ec4a1923404d1d",
             "Volumes": {
                 "/myvolume": {}
             },
@@ -96,8 +112,8 @@
         },
         "Architecture": "amd64",
         "Os": "linux",
-        "Size": 3987495000,
-        "VirtualSize": 3987495000,
+        "Size": 3987495,
+        "VirtualSize": 3987495,
         "GraphDriver": {
             "Name": "aufs",
             "Data": null
