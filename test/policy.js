@@ -5,11 +5,24 @@ var policy = require('../lib/policy.js')();
 var YAML = require('yamljs');
 var fs = require('fs');
 var defaultPolicy = YAML.load('./default_policy.yaml');
+var emptyContainer = JSON.parse(fs.readFileSync(__dirname + '/fixtures/empty_container.json', 'utf8'));
 
 it('succeeds with an empty policy',
 function() {
   var testPolicy = {}
   var testContainer = {};
+
+  var result = policy.execute(testPolicy, testContainer);
+  assert(result.isPassing());
+
+  // Ensure message count matches test count
+  assert(policy.enumerateTests.length === result.getMessages.length);
+});
+
+it('succeeds with an empty policy, empty container fixture',
+function() {
+  var testPolicy = {}
+  var testContainer = emptyContainer;
 
   var result = policy.execute(testPolicy, testContainer);
   assert(result.isPassing());
@@ -270,4 +283,54 @@ function() {
   // Ensure that single message is a warning
   assert(msgs.messages.shift()[0] === 'warning');
   assert(result);
+});
+
+it('succeeds without healthcheck, with restriction',
+function() {
+  var testPolicy = { healthcheck: { disallowed: true }};
+  var testContainer = {};
+  var msgs = policy.msgs();
+  var result = policy.validateHealthCheck(testPolicy, testContainer, msgs);
+
+  assert(result);
+});
+
+it('succeeds with "none" healthcheck, with restriction',
+function() {
+  var testPolicy = { healthcheck: { disallowed: true }};
+  var testContainer = { ContainerConfig: { Healthcheck: { Test: ['NONE']}}};
+  var msgs = policy.msgs();
+  var result = policy.validateHealthCheck(testPolicy, testContainer, msgs);
+
+  assert(result);
+});
+
+it('succeeds with healthcheck, without restriction',
+function() {
+  var testPolicy = { healthcheck: { disallowed: false }};
+  var testContainer = { ContainerConfig: { Healthcheck: { Test: ['CMD-SHELL', 'ls -l']}}};
+  var msgs = policy.msgs();
+  var result = policy.validateHealthCheck(testPolicy, testContainer, msgs);
+
+  assert(result);
+});
+
+it('succeeds with healthcheck, with default (not restricted)',
+function() {
+  var testPolicy = { healthcheck: { disallowed: false }};
+  var testContainer = { ContainerConfig: { Healthcheck: { Test: ['CMD-SHELL', 'ls -l']}}};
+  var msgs = policy.msgs();
+  var result = policy.validateHealthCheck(testPolicy, testContainer, msgs);
+
+  assert(result);
+});
+
+it('fails with healthcheck, with restriction',
+function() {
+  var testPolicy = { healthcheck: { disallowed: true }};
+  var testContainer = { ContainerConfig: { Healthcheck: { Test: ['CMD-SHELL', 'ls -l']}}};
+  var msgs = policy.msgs();
+  var result = policy.validateHealthCheck(testPolicy, testContainer, msgs);
+
+  assert(!result);
 });

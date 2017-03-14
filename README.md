@@ -109,3 +109,10 @@ size:
   max: 1500
   warning: 1000
 ```
+
+- Restrict health check usage
+```
+healthcheck:
+  # Causes contention between orchestrator and Docker engine health status
+  disallowed: true;
+```

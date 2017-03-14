@@ -16,4 +16,7 @@ size:
   # In MB
   max: 1500
   warning: 1000
+healthcheck:
+  # Causes contention between orchestrator and Docker engine health status
+  disallowed: true;
 
