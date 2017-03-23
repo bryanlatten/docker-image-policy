@@ -334,3 +334,73 @@ function() {
 
   assert(!result);
 });
+
+it('adds all overrides against an empty policy',
+function() {
+  var myPolicy = {};
+  var maxSize = 50;
+  var warningSize = 25;
+  var disallowedLabels = 'ABC,DEF';
+  var disallowedEnvs = 'IAM,ROLE';
+
+  var inputs = {
+    max: maxSize,
+    warning: warningSize,
+    labels: disallowedLabels,
+    envs: disallowedEnvs
+  };
+
+  var newPolicy = policy.applyOverrides(myPolicy, inputs, []);
+
+  assert(maxSize === newPolicy.size.max);
+  assert(warningSize === newPolicy.size.warning);
+  assert.deepEqual(disallowedLabels.split(','), newPolicy.labels.disallow);
+  assert.deepEqual(disallowedEnvs.split(','), newPolicy.env_keys.disallow);
+});
+
+it('overrides existing policy',
+function() {
+  var myPolicy = {
+    size: {
+      max: 654,
+      warning: 321
+    },
+    env_keys: {
+      disallow: [ 'KEY1', 'KEY2' ]
+    },
+    labels: {
+      disallow: [ 'LABEL1', 'LABEL2' ]
+    },
+    ports: {
+      range: '1-10000'
+    }
+  };
+
+  var maxSize = 9876;
+  var warningSize = 5432;
+  var disallowedLabels = 'UPDATED,LABELS';
+  var disallowedEnvs = 'ENVROLES,HAVEBEENUPDATED';
+  var newRange = '1-10';
+
+  var inputs = {
+    max: maxSize,
+    warning: warningSize,
+    labels: disallowedLabels,
+    envs: disallowedEnvs,
+    range: newRange
+  };
+
+  var newPolicy = policy.applyOverrides(myPolicy, inputs, []);
+
+  assert.strictEqual(maxSize, newPolicy.size.max);
+  assert.strictEqual(warningSize, newPolicy.size.warning);
+  assert.notStrictEqual(myPolicy.size.max, newPolicy.size.max);
+  assert.notStrictEqual(myPolicy.size.warning, newPolicy.size.warning);
+  assert.strictEqual(newRange, newPolicy.ports.range);
+
+  assert.deepEqual(disallowedLabels.split(','), newPolicy.labels.disallow);
+  assert.notDeepEqual(myPolicy.labels.disallow, newPolicy.labels.disallow);
+
+  assert.deepEqual(disallowedEnvs.split(','), newPolicy.env_keys.disallow);
+  assert.notDeepEqual(myPolicy.env_keys.disallow, newPolicy.env_keys.disallow);
+});

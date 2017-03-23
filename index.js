@@ -12,11 +12,17 @@ const YAML = require('yamljs');
 var clc = require('cli-color');
 
 program
-  .version('0.0.1')
+  .version('0.2.0')
   .description('Checks a Docker image\'s properties against a policy')
   .usage('[options] <policy file ...>')
-  .option('-p, --policy [file]', 'image policy')
+  .option('-p, --policy <file>', 'image policy, defaults to ./default_policy.conf')
   .option('-i, --inspect', 'docker inspect output (may also be specified as stdin)')
+  .option('-m, --max <size>', 'image size max, in MB', parseInt)
+  .option('-w, --warning <size>', 'image size warning, in MB', parseInt)
+  .option('-l, --labels <labels>', 'add disallowed labels, comma-separated')
+  .option('-e, --envs <keys>', 'add disallowed env keys, comma-separated')
+  .option('-r, --range <ports>', 'low-high ports that are allowed')
+
   .parse(process.argv);
 
 var policyFile = (!program.policy || program.policy === true)
@@ -33,7 +39,7 @@ getStdin().then(str => {
 
   var input = JSON.parse(str);
 
-  if(!Array.isArray(input) || input[0] === undefined) {
+  if (!Array.isArray(input) || input[0] === undefined) {
     console.log('Malformed input detected');
     process.exit(1);
   }
@@ -45,9 +51,20 @@ getStdin().then(str => {
   console.log("Parent: " + container.Parent);
   console.log("\nUsing policy <%s>\n", policyFile);
 
-  var loadedPolicy = YAML.load(policyFile);
   var policy = require("./lib/policy.js")();
 
+  var loadedPolicy = YAML.load(policyFile);
+
+  var overrideMsgs = [];
+  loadedPolicy = policy.applyOverrides(loadedPolicy, program, overrideMsgs);
+
+  overrideMsgs.forEach(function(text) {
+    console.log('<%s> %s', clc.cyanBright('Policy Override'), text);
+  });
+
+  if (overrideMsgs.length > 0) {
+    console.log(''); // Inserts a new line
+  }
 
   var testStatus = policy.execute(loadedPolicy, container);
 
@@ -72,7 +89,7 @@ getStdin().then(str => {
       default:
         console.log("[%s %s", clc.blue('UNKOWN'), text);
         break;
-    } // switch mesg
+    } // switch severity
 
   });
 
@@ -84,4 +101,4 @@ getStdin().then(str => {
   console.log("\nStatus [%s]\n", clc.green('PASS'));
   process.exit(0);
 
-});
+}); // getStdin
