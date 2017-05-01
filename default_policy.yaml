@@ -19,4 +19,6 @@ size:
 healthcheck:
   # Causes contention between orchestrator and Docker engine health status
   disallowed: true;
-
+layers:
+  max: 100
+  warning: 20

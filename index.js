@@ -22,6 +22,8 @@ program
   .option('-l, --labels <labels>', 'add disallowed labels, comma-separated')
   .option('-e, --envs <keys>', 'add disallowed env keys, comma-separated')
   .option('-r, --range <ports>', 'low-high ports that are allowed')
+  .option('--layers_max <count>', 'maximum number of filesystem layers')
+  .option('--layers_warning <count>', 'warning number of filesystem layers')
 
   .parse(process.argv);
 

@@ -4,8 +4,10 @@ var assert = require('assert');
 var policy = require('../lib/policy.js')();
 var YAML = require('yamljs');
 var fs = require('fs');
+var R = require('ramda');
 var defaultPolicy = YAML.load('./default_policy.yaml');
-var emptyContainer = JSON.parse(fs.readFileSync(__dirname + '/fixtures/empty_container.json', 'utf8'));
+var emptyContainer = JSON.parse(fs.readFileSync(__dirname + '/fixtures/empty_container.json', 'utf8'))[0];
+var failingContainer = JSON.parse(fs.readFileSync(__dirname + '/fixtures/failing_container.json', 'utf8'))[0];
 
 it('succeeds with an empty policy',
 function() {
@@ -35,8 +37,7 @@ it('fails with violations of the default policy',
 function() {
 
   var testPolicy = defaultPolicy;
-  var testContainer = JSON.parse(fs.readFileSync(__dirname + '/fixtures/failing_default.json', 'utf8'))[0];
-  var result = policy.execute(testPolicy, testContainer);
+  var result = policy.execute(testPolicy, failingContainer);
 
   assert(!result.isPassing());
 
@@ -200,6 +201,15 @@ function() {
   assert(result);
 });
 
+it('succeeds without an input port, with a port range',
+function() {
+  var testPolicy = { ports: { range: '1-100' }};
+  var testContainer = { ContainerConfig: {} };
+
+  var result = policy.validatePortRange(testPolicy, testContainer, policy.msgs());
+  assert(result);
+});
+
 it('fails with a port, outside of port range',
 function() {
   var testPolicy = { ports: { range: '1-100' }};
@@ -252,6 +262,8 @@ function() {
   var msgs = policy.msgs();
   var result = policy.validateContainerSize(testPolicy, testContainer, msgs);
 
+  assert(msgs.messages.length === 1);
+  assert(msgs.messages.shift()[0] === 'exception'); // Ensure that single message is an exception
   assert(!result);
 });
 
@@ -262,11 +274,8 @@ function() {
   var msgs = policy.msgs();
   var result = policy.validateContainerSize(testPolicy, testContainer, msgs);
 
-  // Ensure there is only a single message in the stack
   assert(msgs.messages.length === 1);
-
-  // Ensure that single message is a warning
-  assert(msgs.messages.shift()[0] === 'warning');
+  assert(msgs.messages.shift()[0] === 'warning'); // Ensure that single message is a warning
   assert(result);
 });
 
@@ -277,11 +286,8 @@ function() {
   var msgs = policy.msgs();
   var result = policy.validateContainerSize(testPolicy, testContainer, msgs);
 
-  // Ensure there is only a single message in the stack
   assert(msgs.messages.length === 1);
-
-  // Ensure that single message is a warning
-  assert(msgs.messages.shift()[0] === 'warning');
+  assert(msgs.messages.shift()[0] === 'warning'); // Ensure that single message is a warning
   assert(result);
 });
 
@@ -335,6 +341,69 @@ function() {
   assert(!result);
 });
 
+it('succeeds at max layer count',
+function() {
+  var testContainer = R.clone(failingContainer);
+  assert(testContainer.RootFS.Layers.length > 0);
+
+  var testPolicy = { layers: { max: testContainer.RootFS.Layers.length }};
+
+  var result = policy.validateLayerCount(testPolicy, testContainer, policy.msgs());
+  assert(result);
+});
+
+it('fails over max size limit',
+function() {
+  var testPolicy = { layers: { max: '1' }};
+  assert(emptyContainer.RootFS.Layers.length > 1);
+
+  var result = policy.validateLayerCount(testPolicy, emptyContainer, policy.msgs());
+  assert(!result);
+});
+
+it('fails when warning >= max layer count',
+function() {
+  var testPolicy = { layers: { max: 10, warning: 11 }};
+  var msgs = policy.msgs();
+  var result = policy.validateLayerCount(testPolicy, emptyContainer, msgs);
+
+  assert(msgs.messages.length === 1);
+  assert(msgs.messages.shift()[0] === 'exception'); // Ensure that single message is an exception
+  assert(!result);
+});
+
+it('succeeds over warning, but under max size limit',
+function() {
+  var newMax = (emptyContainer.RootFS.Layers.length + 1);
+  var newWarning = 1;
+  var testPolicy = { layers: { max: newMax, warning: newWarning }};
+  assert(emptyContainer.RootFS.Layers.length < newMax && emptyContainer.RootFS.Layers.length > newWarning);
+
+  var msgs = policy.msgs();
+  var result = policy.validateLayerCount(testPolicy, emptyContainer, msgs);
+
+  // Ensure there is only a single message in the stack
+  assert(msgs.messages.length === 1);
+
+  // Ensure that single message is a warning
+  assert(msgs.messages.shift()[0] === 'warning');
+  assert(result);
+});
+
+it('succeeds over warning, with no max size limit',
+function() {
+  var newWarning = 1;
+  var testPolicy = { layers: { warning: newWarning }};
+  assert(emptyContainer.RootFS.Layers.length > newWarning);
+  var testContainer = R.clone(emptyContainer);
+  var msgs = policy.msgs();
+  var result = policy.validateLayerCount(testPolicy, testContainer, msgs);
+
+  assert(msgs.messages.length === 1);
+  assert(msgs.messages.shift()[0] === 'warning'); // Ensure that single message is a warning
+  assert(result);
+});
+
 it('adds all overrides against an empty policy',
 function() {
   var myPolicy = {};
@@ -342,12 +411,16 @@ function() {
   var warningSize = 25;
   var disallowedLabels = 'ABC,DEF';
   var disallowedEnvs = 'IAM,ROLE';
+  var maxLayers = 50;
+  var warningLayers = 10;
 
   var inputs = {
     max: maxSize,
     warning: warningSize,
     labels: disallowedLabels,
-    envs: disallowedEnvs
+    envs: disallowedEnvs,
+    layers_max: maxLayers,
+    layers_warning: warningLayers
   };
 
   var newPolicy = policy.applyOverrides(myPolicy, inputs, []);
@@ -373,6 +446,10 @@ function() {
     },
     ports: {
       range: '1-10000'
+    },
+    layers: {
+      max: 100,
+      warning: 1
     }
   };
 
@@ -381,13 +458,17 @@ function() {
   var disallowedLabels = 'UPDATED,LABELS';
   var disallowedEnvs = 'ENVROLES,HAVEBEENUPDATED';
   var newRange = '1-10';
+  var maxLayers = 50;
+  var warningLayers = 10;
 
   var inputs = {
     max: maxSize,
     warning: warningSize,
     labels: disallowedLabels,
     envs: disallowedEnvs,
-    range: newRange
+    range: newRange,
+    layers_max: maxLayers,
+    layers_warning: warningLayers
   };
 
   var newPolicy = policy.applyOverrides(myPolicy, inputs, []);
@@ -403,4 +484,7 @@ function() {
 
   assert.deepEqual(disallowedEnvs.split(','), newPolicy.env_keys.disallow);
   assert.notDeepEqual(myPolicy.env_keys.disallow, newPolicy.env_keys.disallow);
+
+  assert.strictEqual(maxLayers, newPolicy.layers.max);
+  assert.strictEqual(warningLayers, newPolicy.layers.warning);
 });

@@ -50,6 +50,8 @@ Using policy <./default_policy.yaml>
   - IAM_ROLE
 [PASS] volumes not allowed, none defined
 [FAIL] exposed port(s) required
+[PASS] no healthcheck specified
+[PASS] 3 filesystem layers, maximum: 100
 
 Status [FAIL]
 ```
@@ -68,6 +70,9 @@ Using policy <./default_policy.yaml>
 [PASS] labels validated
 [PASS] env keys validated
 [PASS] volumes not allowed, none defined
+[FAIL] exposed port(s) required
+[PASS] no healthcheck specified
+[PASS] 3 filesystem layers, maximum: 100
 
 Status [PASS]
 ```
@@ -116,3 +121,11 @@ healthcheck:
   # Causes contention between orchestrator and Docker engine health status
   disallowed: true;
 ```
+
+- Restrict maximum number of filesystem layers
+```
+layers:
+  max: 100
+  warning: 20
+```
+
