@@ -5,6 +5,7 @@ labels:
 env_keys:
   disallow:
   - IAM_ROLE
+  - LD_PRELOAD
 volumes:
   # Does not fit with stateless design
   disallowed: true
