@@ -3,33 +3,13 @@
 # docker-image-policy
 Quick validation of an inspected Docker image according to a policy file
 
-### Pre-reqs
-- nodejs (7.6+)
-- npm (4.1+)
-- docker
-
-### Local Development
-
-1. Clone repo
-1. `npm i`
-1. Pipe Docker's `inspect` output into app
-```docker inspect {target_image} | node index.js```
-
-### Local Development: Docker
-
-1. Clone repo
-1. `docker build -t imagepolicy .`
-1. ```docker inspect {target_image} | docker run -i imagepolicy```
-
-### Testing 
-
-- After local installation, running `npm test` in working directory
 
 ### Usage
 
 - Uses pre-built containers on Docker Hub
 - Uses default [policy](https://github.com/bryanlatten/docker-image-policy/blob/master/default_policy.yaml)
 
+Pipe a target image's Docker-inspected output into container's stdin
 
 ```docker inspect {target_image} | docker run -i bryanlatten/docker-image-policy```
 
@@ -128,4 +108,23 @@ layers:
   max: 100
   warning: 20
 ```
+
+### Local Development
+
+1. Pre-reqs: nodejs (8.0+), npm (5.0+), docker
+1. Clone repo
+1. `npm i`
+1. Pipe Docker's `inspect` output into app
+```docker inspect {target_image} | node index.js```
+
+### Testing
+
+- After local installation, running `npm test` in working directory
+
+### Local Development: Docker
+
+1. Clone repo
+1. `docker build -t imagepolicy .`
+1. ```docker inspect {target_image} | docker run -i imagepolicy```
+
 
