@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/bryanlatten/docker-image-policy.svg?branch=master)](https://travis-ci.org/bryanlatten/docker-image-policy)
+[![Docker Pulls](https://img.shields.io/docker/pulls/bryanlatten/docker-image-policy.svg?maxAge=2592000)]()
 
 # docker-image-policy
 Quick validation of an inspected Docker image according to a policy file
