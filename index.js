@@ -1,5 +1,4 @@
 #!/usr/bin/env node
-'use strict';
 
 /**
  * Module dependencies.
@@ -12,7 +11,7 @@ const YAML = require('yamljs');
 var clc = require('cli-color');
 
 program
-  .version('0.2.0')
+  .version('0.2.1')
   .description('Checks a Docker image\'s properties against a policy')
   .usage('[options] <policy file ...>')
   .option('-p, --policy <file>', 'image policy, defaults to ./default_policy.conf')

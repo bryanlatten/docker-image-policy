@@ -1,16 +1,23 @@
 {
+  "name": "docker-image-policy",
+  "version": "0.2.1",
+  "license": "Apache-2.0",
+  "repository": "https://github.com/bryanlatten/docker-image-policy",
   "scripts": {
     "test": "mocha"
   },
+  "engines": {
+    "node": ">=8.0.0"
+  },
   "dependencies": {
     "cli-color": "^1.2.0",
-    "commander": "^2.9.0",
+    "commander": "^2.11.0",
     "get-stdin": "^5.0.1",
-    "yamljs": "^0.2.8"
+    "yamljs": "^0.2.10"
   },
   "devDependencies": {
     "chai": "^3.5.0",
-    "mocha": "^3.2.0",
+    "mocha": "^3.4.2",
     "ramda": "^0.23.0",
     "sinon": "^1.17.7"
   }
