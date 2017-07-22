@@ -10,8 +10,12 @@ const fs = require('fs');
 const YAML = require('yamljs');
 var clc = require('cli-color');
 
+const VERSION = '0.4.0'
+
+console.log('docker-image-policy, Version ' + VERSION);
+
 program
-  .version('0.2.1')
+  .version(VERSION)
   .description('Checks a Docker image\'s properties against a policy')
   .usage('[options] <policy file ...>')
   .option('-p, --policy <file>', 'image policy, defaults to ./default_policy.conf')
