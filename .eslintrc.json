@@ -6,7 +6,9 @@
     "module": true,
     "console": true,
     "process": true,
-    "setInterval": true
+    "setInterval": true,
+    "__dirname": true,
+    "it": true
   },
   "rules":{
     "no-console":0
