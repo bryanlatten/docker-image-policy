@@ -103,6 +103,6 @@ getStdin().then(str => {
                     : clc.redBright('FAIL');
 
   console.log("\nStatus [%s]\n", testMessage);
-  process.exit(testIsPassing ? 1 : 0);
+  process.exit(testIsPassing ? 0 : 1);
 
 }); // getStdin
