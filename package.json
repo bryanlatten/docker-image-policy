@@ -9,14 +9,14 @@
     "node": ">=8.0.0"
   },
   "dependencies": {
-    "babel-eslint": "^7.2.3",
     "cli-color": "^1.2.0",
     "commander": "^2.11.0",
-    "eslint": "^4.3.0",
     "get-stdin": "^5.0.1",
     "yamljs": "^0.2.10"
   },
   "devDependencies": {
+    "babel-eslint": "^7.2.3",
+    "eslint": "^4.3.0",
     "chai": "^3.5.0",
     "mocha": "^3.4.2",
     "ramda": "^0.23.0",
