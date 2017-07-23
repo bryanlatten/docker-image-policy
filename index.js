@@ -6,7 +6,6 @@
 
 const getStdin = require('get-stdin');
 const program = require('commander');
-const fs = require('fs');
 const YAML = require('yamljs');
 var clc = require('cli-color');
 
@@ -98,12 +97,12 @@ getStdin().then(str => {
 
   });
 
-  if (!testStatus.isPassing()) {
-    console.log("\nStatus [%s]\n", clc.redBright('FAIL'));
-    process.exit(1);
-  }
+  var testIsPassing = testStatus.isPassing();
+  var testMessage = (testIsPassing)
+                    ? clc.green('PASS')
+                    : clc.redBright('FAIL');
 
-  console.log("\nStatus [%s]\n", clc.green('PASS'));
-  process.exit(0);
+  console.log("\nStatus [%s]\n", testMessage);
+  process.exit(testIsPassing ? 1 : 0);
 
 }); // getStdin

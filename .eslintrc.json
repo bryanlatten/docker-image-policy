@@ -1,0 +1,14 @@
+{
+  "extends": "eslint:recommended",
+  "parser": "babel-eslint",
+  "globals": {
+    "require": true,
+    "module": true,
+    "console": true,
+    "process": true,
+    "setInterval": true
+  },
+  "rules":{
+    "no-console":0
+  }
+}
