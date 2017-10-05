@@ -16,9 +16,9 @@
   },
   "devDependencies": {
     "babel-eslint": "^7.2.3",
-    "eslint": "^4.3.0",
     "chai": "^3.5.0",
-    "mocha": "^3.4.2",
+    "eslint": "^4.8.0",
+    "mocha": "^3.5.3",
     "ramda": "^0.23.0",
     "sinon": "^1.17.7"
   }
