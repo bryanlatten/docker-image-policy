@@ -16,7 +16,7 @@ Pipe a target image's Docker-inspected output into container's stdin
 
 ##### Failing Run, using default policy
 ```
-docker inspect 359039b8c10c | node index.js
+docker inspect 359039b8c10c | docker run -i bryanlatten/docker-image-policy
 
 Scanning <sha256:4612b98d0345171da30a0318faa9d1b05da7c8cb1440d5f5d2e5f032f49908c0>
 Docker Build: 17.03.0-ce
@@ -39,7 +39,7 @@ Status [FAIL]
 
 ##### Passing Run, using default policy
 ```
-docker inspect d183d547d7ab | node index.js
+docker inspect d183d547d7ab | docker run -i bryanlatten/docker-image-policy
 
 Scanning <sha256:d183d547d7abcb0d68f9ed4598963120a4e82d4105bcdf4585f6ef553400f913>
 Docker Build: 1.12.6-cs6

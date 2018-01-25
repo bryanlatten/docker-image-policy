@@ -1,11 +1,14 @@
 version: "1"
 labels:
   disallow:
-  -  com.swipely.iam-docker.iam-profile
+  - com.swipely.iam-docker.iam-profile
+  - com.swipely.iam-docker.msi-explicit-identity
+  - AGENT_FILL
 env_keys:
   disallow:
   - IAM_ROLE
   - LD_PRELOAD
+  - AGENT_FILL
 volumes:
   # Does not fit with stateless design
   disallowed: true
