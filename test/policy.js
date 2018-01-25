@@ -63,6 +63,15 @@ function() {
   assert(!result);
 });
 
+it('fails with another disallowed label',
+function() {
+  var testPolicy = { labels: { disallow: ['com.swipely.iam-docker.msi-explicit-identity']}};
+  var testContainer = { Config: { Labels: { 'com.swipely.iam-docker.msi-explicit-identity': 12345}}};
+
+  var result = policy.validateLabels(testPolicy, testContainer, policy.msgs());
+  assert(!result);
+});
+
 it('succeeds without disallowed env keys',
 function() {
 
@@ -78,6 +87,16 @@ function() {
 
   var testPolicy = { env_keys: { disallow: ['IAM_ROLE', 'ABCDEF'] }};
   var testContainer = { Config: { Env: ['IAM_ROLE=12345']}};
+
+  var result = policy.validateEnvKeys(testPolicy, testContainer, policy.msgs());
+  assert(!result);
+});
+
+it('fails with another disallowed env key',
+function() {
+
+  var testPolicy = { env_keys: { disallow: ['AGENT_FILL'] }};
+  var testContainer = { Config: { Env: ['AGENT_FILL=true']}};
 
   var result = policy.validateEnvKeys(testPolicy, testContainer, policy.msgs());
   assert(!result);
