@@ -9,7 +9,7 @@ const program = require('commander');
 const YAML = require('yamljs');
 var clc = require('cli-color');
 
-const VERSION = '0.4.0'
+const VERSION = '0.5.2'
 
 console.log('docker-image-policy, Version ' + VERSION);
 
