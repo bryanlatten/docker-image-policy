@@ -6,10 +6,16 @@
 
 const getStdin = require('get-stdin');
 const program = require('commander');
-const YAML = require('yamljs');
+const yaml = require('js-yaml');
+
+const fs = require('fs');
+const path = require('path');
+
+const DEFAULT_POLICY = 'default_policy.yaml';
+
 var clc = require('cli-color');
 
-const VERSION = '0.5.2'
+const VERSION = '0.5.3'
 
 console.log('docker-image-policy, Version ' + VERSION);
 
@@ -17,7 +23,7 @@ program
   .version(VERSION)
   .description('Checks a Docker image\'s properties against a policy')
   .usage('[options] <policy file ...>')
-  .option('-p, --policy <file>', 'image policy, defaults to ./default_policy.conf')
+  .option('-p, --policy <file>', 'image policy, defaults to ./default_policy.yaml')
   .option('-i, --inspect', 'docker inspect output (may also be specified as stdin)')
   .option('-m, --max <size>', 'image size max, in MB', parseInt)
   .option('-w, --warning <size>', 'image size warning, in MB', parseInt)
@@ -29,9 +35,19 @@ program
 
   .parse(process.argv);
 
-var policyFile = (!program.policy || program.policy === true)
-                 ? './default_policy.yaml'
-                 : 'program.policy';
+var policyFile = program.policy || `./${DEFAULT_POLICY}`;
+var policyPath = path.resolve(policyFile)
+
+if (!fs.existsSync(policyPath)) {
+  console.log('[%s] policy does not exist: %s', clc.redBright('Error'), clc.whiteBright(policyFile));
+  process.exit(1);
+}
+
+// File reading is delegated to YAML library, which does poor error handling
+if (fs.statSync(policyPath).isDirectory()) {
+  console.log('[%s] cannot read policy: %s', clc.redBright('Error'), clc.whiteBright(policyFile));
+  process.exit(1);
+}
 
 getStdin().then(str => {
 
@@ -44,7 +60,7 @@ getStdin().then(str => {
   var input = JSON.parse(str);
 
   if (!Array.isArray(input) || input[0] === undefined) {
-    console.log('Malformed input detected');
+    console.log('[%s] malformed input detected', clc.redBright('Error'));
     process.exit(1);
   }
 
@@ -56,8 +72,15 @@ getStdin().then(str => {
   console.log("\nUsing policy <%s>\n", policyFile);
 
   var policy = require("./lib/policy.js")();
+  var loadedPolicy;
 
-  var loadedPolicy = YAML.load(policyFile);
+  try {
+    loadedPolicy = yaml.safeLoad(fs.readFileSync(policyPath, 'utf8'))
+  }
+  catch (err) {
+    console.log('[%s] unable to parse policy YAML:', clc.redBright('Error'), err.reason);
+    process.exit(1);
+  }
 
   var overrideMsgs = [];
   loadedPolicy = policy.applyOverrides(loadedPolicy, program, overrideMsgs);

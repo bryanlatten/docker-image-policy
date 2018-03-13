@@ -2,10 +2,10 @@
 
 var assert = require('assert');
 var policy = require('../lib/policy.js')();
-var YAML = require('yamljs');
+var yaml = require('js-yaml');
 var fs = require('fs');
 var R = require('ramda');
-var defaultPolicy = YAML.load('./default_policy.yaml');
+var defaultPolicy = yaml.safeLoad(fs.readFileSync('./default_policy.yaml', 'utf8'));
 var emptyContainer = JSON.parse(fs.readFileSync(__dirname + '/fixtures/empty_container.json', 'utf8'))[0];
 var failingContainer = JSON.parse(fs.readFileSync(__dirname + '/fixtures/failing_container.json', 'utf8'))[0];
 
