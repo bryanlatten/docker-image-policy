@@ -12,7 +12,7 @@
     "cli-color": "^1.2.0",
     "commander": "^2.13.0",
     "get-stdin": "^5.0.1",
-    "yamljs": "^0.2.10"
+    "js-yaml": "^3.11.0"
   },
   "devDependencies": {
     "babel-eslint": "^7.2.3",
