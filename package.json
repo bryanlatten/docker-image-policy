@@ -6,18 +6,18 @@
     "test": "mocha"
   },
   "engines": {
-    "node": ">=9.4.0"
+    "node": ">=10.0.0"
   },
   "dependencies": {
     "cli-color": "^1.2.0",
-    "commander": "^2.13.0",
+    "commander": "^2.15.1",
     "get-stdin": "^5.0.1",
     "js-yaml": "^3.11.0"
   },
   "devDependencies": {
     "babel-eslint": "^7.2.3",
     "chai": "^3.5.0",
-    "eslint": "^4.16.0",
+    "eslint": "^4.19.1",
     "mocha": "^3.5.3",
     "ramda": "^0.23.0",
     "sinon": "^1.17.7"
