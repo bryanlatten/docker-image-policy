@@ -7,6 +7,7 @@ labels:
 env_keys:
   disallow:
   - IAM_ROLE
+  - MSI_IDENTITY
   - LD_PRELOAD
   - AGENT_FILL
 volumes:
