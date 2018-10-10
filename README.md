@@ -9,14 +9,41 @@ Quick validation of an inspected Docker image according to a policy file
 
 - Uses pre-built containers on Docker Hub
 - Uses default [policy](https://github.com/bryanlatten/docker-image-policy/blob/master/default_policy.yaml)
+- NOTE: `docker inspect` expects the image to be stored locally, run `docker pull {target_image}` if not yet local
 
 Pipe a target image's Docker-inspected output into container's stdin
 
-```docker inspect {target_image} | docker run -i bryanlatten/docker-image-policy```
+```
+$ docker pull ubuntu:18.04
+$ docker inspect ubuntu:18.04 | docker run -i bryanlatten/docker-image-policy
+```
+
+##### Passing Run, using default policy
+```
+docker inspect ubuntu:18.04 | docker run -i bryanlatten/docker-image-policy
+
+Scanning <8672b25e842c4c36f9f75d7edf48844ad32af57cf40596f5f236ed6462f073ba>
+Docker Build: 17.03.0-ce
+Parent:
+
+Using policy <./default_policy.yaml>
+
+[PASS] labels validated
+[PASS] env keys validated
+[PASS] volumes not allowed, none defined
+[PASS] exposed ports allowed, none detected
+[PASS] no exposed ports for range check [1025-65535]
+[WARN] 697MB container size, recommend < 500MB
+[PASS] no healthcheck specified
+[PASS] 8 filesystem layers, maximum: 100
+
+Status [PASS]
+```
 
 ##### Failing Run, using default policy
+
 ```
-docker inspect 359039b8c10c | docker run -i bryanlatten/docker-image-policy
+docker inspect failingImageTag:v1 | docker run -i bryanlatten/docker-image-policy
 
 Scanning <sha256:4612b98d0345171da30a0318faa9d1b05da7c8cb1440d5f5d2e5f032f49908c0>
 Docker Build: 17.03.0-ce
@@ -35,27 +62,6 @@ Using policy <./default_policy.yaml>
 [PASS] 3 filesystem layers, maximum: 100
 
 Status [FAIL]
-```
-
-##### Passing Run, using default policy
-```
-docker inspect d183d547d7ab | docker run -i bryanlatten/docker-image-policy
-
-Scanning <sha256:d183d547d7abcb0d68f9ed4598963120a4e82d4105bcdf4585f6ef553400f913>
-Docker Build: 1.12.6-cs6
-Parent:
-
-Using policy <./default_policy.yaml>
-
-[PASS] 370MB within 1500MB container size limit
-[PASS] labels validated
-[PASS] env keys validated
-[PASS] volumes not allowed, none defined
-[FAIL] exposed port(s) required
-[PASS] no healthcheck specified
-[PASS] 3 filesystem layers, maximum: 100
-
-Status [PASS]
 ```
 
 ### Policy
