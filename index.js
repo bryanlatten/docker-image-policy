@@ -15,14 +15,8 @@ const DEFAULT_POLICY = 'default_policy.yaml';
 
 var clc = require('cli-color');
 
-const VERSION = '0.5.3'
-
-console.log('docker-image-policy, Version ' + VERSION);
-
 program
-  .version(VERSION)
   .description('Checks a Docker image\'s properties against a policy')
-  .usage('[options] <policy file ...>')
   .option('-p, --policy <file>', 'image policy, defaults to ./default_policy.yaml')
   .option('-i, --inspect', 'docker inspect output (may also be specified as stdin)')
   .option('-m, --max <size>', 'image size max, in MB', parseInt)
