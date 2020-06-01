@@ -1,5 +1,9 @@
 {
-  "extends": "eslint:recommended",
+  "extends": "airbnb-base",
+  "env": {
+      "browser": false,
+      "node": true
+  },
   "parser": "babel-eslint",
   "globals": {
     "require": true,
