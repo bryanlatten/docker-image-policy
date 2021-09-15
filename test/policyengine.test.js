@@ -2,9 +2,9 @@ const assert = require('assert');
 const fs = require('fs');
 const yaml = require('js-yaml');
 
-const policyEngine = require('../lib/policyengine.js');
+const policyEngine = require('../lib/policyengine');
 
-const defaultPolicy = yaml.safeLoad(fs.readFileSync('./default_policy.yaml', 'utf8'));
+const defaultPolicy = yaml.load(fs.readFileSync('./default_policy.yaml', 'utf8'));
 const emptyContainer = JSON.parse(fs.readFileSync(`${__dirname}/fixtures/empty_container.json`, 'utf8'))[0];
 const failingContainer = JSON.parse(fs.readFileSync(`${__dirname}/fixtures/failing_container.json`, 'utf8'))[0];
 

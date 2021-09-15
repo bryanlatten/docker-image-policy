@@ -6,21 +6,21 @@
     "test": "mocha"
   },
   "engines": {
-    "node": ">=12.0.0"
+    "node": ">=14.0.0"
   },
   "dependencies": {
     "cli-color": "^2.0.0",
-    "commander": "^6.2.1",
-    "get-stdin": "^8.0.0",
-    "js-yaml": "^3.14.1"
+    "commander": "^8.2.0",
+    "get-stdin": "^9.0.0",
+    "js-yaml": "^4.1.0"
   },
   "devDependencies": {
     "babel-eslint": "^10.1.0",
     "chai": "^4.3.4",
-    "eslint": "^7.25.0",
+    "eslint": "^7.32.0",
     "eslint-config-airbnb-base": "^14.2.1",
-    "eslint-plugin-import": "^2.22.1",
-    "mocha": "^7.2.0",
-    "sinon": "^9.2.4"
+    "eslint-plugin-import": "^2.24.2",
+    "mocha": "^9.1.1",
+    "sinon": "^11.1.2"
   }
 }

@@ -7,7 +7,7 @@ const path = require('path');
 const program = require('commander');
 const yaml = require('js-yaml');
 
-const policyEngine = require('./lib/policyengine.js');
+const policyEngine = require('./lib/policyengine');
 
 const DEFAULT_POLICY = 'default_policy.yaml';
 
@@ -62,7 +62,7 @@ getStdin().then((str) => {
   let loadedPolicy;
 
   try {
-    loadedPolicy = yaml.safeLoad(fs.readFileSync(policyPath, 'utf8'));
+    loadedPolicy = yaml.load(fs.readFileSync(policyPath, 'utf8'));
   } catch (err) {
     console.log('[%s] unable to parse policy YAML:', clc.redBright('Error'), err.reason);
     process.exit(1);
