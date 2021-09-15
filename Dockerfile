@@ -1,4 +1,4 @@
-FROM mhart/alpine-node:12 as base
+FROM mhart/alpine-node:14 as base
 
 # Ensure application code makes it into the /app directory
 COPY ./ /app/
